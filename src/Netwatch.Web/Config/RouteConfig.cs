@@ -32,7 +32,7 @@ namespace Netwatch.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute("Default", "{controller}/{action}/{id}",
-                new {controller = "Dashboard", action = "Index", id = UrlParameter.Optional}
+                new {controller = "MonitoredServices", action = "Index", id = UrlParameter.Optional}
                 );
 
             routes.AppendTrailingSlash = true;
