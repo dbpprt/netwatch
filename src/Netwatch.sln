@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch.Web", "Netwatch.Web\Netwatch.Web.csproj", "{B8C944F9-3430-4032-B83D-92BC41B10302}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch.Model", "Netwatch.Model\Netwatch.Model.csproj", "{A0093403-308E-4B1D-A2BE-BABD465B2AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch.DataAccessLayer", "Netwatch.DataAccessLayer\Netwatch.DataAccessLayer.csproj", "{626AA128-061B-4E29-9BBC-71AD1FA103B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch.ServiceLayer", "Netwatch.ServiceLayer\Netwatch.ServiceLayer.csproj", "{8A62AEC7-3206-4D4D-ADD7-ABFBC5700D1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch", "Netwatch\Netwatch.csproj", "{9FDE1802-87A1-4997-B93C-2ECEFA390723}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netwatch.Synchronization", "Netwatch.Synchronization\Netwatch.Synchronization.csproj", "{F1E03AE9-56BC-4E23-80CC-8FF4C2AD06C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8C944F9-3430-4032-B83D-92BC41B10302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8C944F9-3430-4032-B83D-92BC41B10302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8C944F9-3430-4032-B83D-92BC41B10302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8C944F9-3430-4032-B83D-92BC41B10302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0093403-308E-4B1D-A2BE-BABD465B2AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0093403-308E-4B1D-A2BE-BABD465B2AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0093403-308E-4B1D-A2BE-BABD465B2AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0093403-308E-4B1D-A2BE-BABD465B2AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{626AA128-061B-4E29-9BBC-71AD1FA103B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{626AA128-061B-4E29-9BBC-71AD1FA103B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{626AA128-061B-4E29-9BBC-71AD1FA103B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{626AA128-061B-4E29-9BBC-71AD1FA103B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A62AEC7-3206-4D4D-ADD7-ABFBC5700D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A62AEC7-3206-4D4D-ADD7-ABFBC5700D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A62AEC7-3206-4D4D-ADD7-ABFBC5700D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A62AEC7-3206-4D4D-ADD7-ABFBC5700D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FDE1802-87A1-4997-B93C-2ECEFA390723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FDE1802-87A1-4997-B93C-2ECEFA390723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FDE1802-87A1-4997-B93C-2ECEFA390723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FDE1802-87A1-4997-B93C-2ECEFA390723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E03AE9-56BC-4E23-80CC-8FF4C2AD06C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E03AE9-56BC-4E23-80CC-8FF4C2AD06C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E03AE9-56BC-4E23-80CC-8FF4C2AD06C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E03AE9-56BC-4E23-80CC-8FF4C2AD06C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

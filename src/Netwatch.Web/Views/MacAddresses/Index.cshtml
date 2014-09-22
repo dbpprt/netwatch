@@ -1,0 +1,31 @@
+﻿@model List<TrafficStats.Model.Entities.MacPortMapping>
+
+
+<h2 class="page-header">Results</h2>
+<div class="col-md-12">
+
+    <table class="table table-responsive table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Mac</th>
+                <th>Last seen</th>
+                <th>Port</th>
+                <th>Switch</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var macAddress in Model.OrderByDescending(_ => _.LastSeen))
+            {
+                <tr>
+                    <td>@macAddress.Mac</td>
+                    <td>@macAddress.LastSeen</td>
+                    <td>@macAddress.PortNumber</td>
+                    <td>@macAddress.MonitoredPort.SnmpTarget.DisplayName</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

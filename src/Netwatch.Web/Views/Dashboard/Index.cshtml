@@ -1,0 +1,156 @@
+﻿@using TrafficStats
+@using TrafficStats.Web.ViewModels.Shared
+@model TrafficStats.Web.ViewModels.Dashboard.IndexViewModel
+
+@*<div class="jumbotron" style="text-align: center;">
+    @if (Model.EverythingIsFine)
+    {
+         <h2 style="text-indent:20px;"><i class="fa fa-smile-o"></i>   alles scheint zu funktionieren...</h2>
+    }
+    else
+    {
+         <h2 style="text-indent:20px;"><i class="fa fa-frown-o"></i>   es gibt Internetprobleme...</h2>
+    }
+   
+    <h2 style="text-indent:20px;"><i class="fa fa-sitemap"></i> Auslastung ungefähr @Model.Usage</h2>
+</div>*@
+
+@*<div class="row">
+    <div class="col-md-4">
+        <h2>Switches</h2>
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Service
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                        since
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var monitoredService in Model.MonitoredServices.Where(x => x.Name.StartsWith("switch")))
+                {
+                    <tr>
+                        <td>
+                            @monitoredService.Name
+                        </td>
+                        <td>
+
+                            @if (monitoredService.IsUpAndRunning)
+                            {
+                                <i class="fa fa-check-circle"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-exclamation-circle"></i>
+                            }
+                        </td>
+                        <td>
+                            @((int)(DateTime.Now.Subtract(monitoredService.LastStatusChange).TotalSeconds))s
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    <div class="col-md-4">
+        <h2>Anderer Kram</h2>
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Service
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                        since
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var monitoredService in Model.MonitoredServices.Where(x => !x.Name.StartsWith("switch")))
+                {
+                    <tr>
+                        <td>
+                            @monitoredService.Name
+                        </td>
+                        <td>
+
+                            @if (monitoredService.IsUpAndRunning)
+                            {
+                                <i class="fa fa-check-circle"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-exclamation-circle"></i>
+                            }
+                        </td>
+                        <td>
+                            @((int)(DateTime.Now.Subtract(monitoredService.LastStatusChange).TotalSeconds))s
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <h2>Über diese Seite</h2>
+        <p>Diese Seite ist rein informativ und soll nur einen kleinen Überblick geben, ob das Netzwerk gerade funktioniert oder ob es Probleme gibt, und welche Probleme es gibt! Es werden keine personenbezogenen Daten mitgeschnitten oder sonst was. Alles was hier ausgewertet wird, ist für jeden im Netzwerk sichtbar! Den Sourcecode gibt es gerne ;). Achja und ich weiß, dass der Kram hier irgendwie ein misch-masch aus Deutsch und Englisch ist (inklusive diverser Rechtschreibfehler :D)</p>
+    </div>
+</div>*@
+
+<div class="row" style="text-align: center; margin-top: 15px;">
+    <h2>Traffic today (GB)</h2>
+    <div class="col-md-12" style="text-align: center;">
+
+        @Html.Partial("_SimpleLineChart", new LineChartViewModel
+                {
+                    Id = "today",
+                    Height = 400,
+                    Width = 800,
+                    Labels = Model.OverallTodayStats.Select(report => report.Hour.ToString()).ToList(),
+                    DataSets = new List<LineChartDataSet>
+                    {
+                        new LineChartDataSet
+                        {
+                            Data = Model.OverallTodayStats.Select(report => (long)report.InboundTraffic.FromByteToGigabyte()).ToList()
+                        }.WithFirstColorSchema(),
+                        new LineChartDataSet
+                        {
+                            Data = Model.OverallTodayStats.Select(report => (long)report.OutboundTraffic.FromByteToGigabyte()).ToList()
+                        }.WithSecondColorSchema()
+                    }
+                })
+
+    </div>
+</div>
+
+<div class="row" style="text-align: center; margin-top: 15px;">
+    <h2>Traffic yesterday (GB)</h2>
+    <div class="col-md-12" style="text-align: center;">
+
+        @Html.Partial("_SimpleLineChart", new LineChartViewModel
+                {
+                    Id = "yesterday",
+                    Height = 400,
+                    Width = 800,
+                    Labels = Model.OverallYesterdayStats.Select(report => report.Hour.ToString()).ToList(),
+                    DataSets = new List<LineChartDataSet>
+                    {
+                        new LineChartDataSet
+                        {
+                            Data = Model.OverallYesterdayStats.Select(report => (long)report.InboundTraffic.FromByteToGigabyte()).ToList()
+                        }.WithFirstColorSchema(),
+                        new LineChartDataSet
+                        {
+                            Data = Model.OverallYesterdayStats.Select(report => (long)report.OutboundTraffic.FromByteToGigabyte()).ToList()
+                        }.WithSecondColorSchema()
+                    }
+                })
+
+    </div>
+</div>

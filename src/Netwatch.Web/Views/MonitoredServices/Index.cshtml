@@ -1,0 +1,83 @@
+﻿@using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder
+@using TrafficStats
+@using TrafficStats.Model.Entities
+@using TrafficStats.Web.Common
+@model TrafficStats.Web.ViewModels.MonitoredServices.IndexViewModel
+
+@{
+    var groupings = Model.Groupings;
+    var services = Model.MonitoredServices;
+
+    var groups = services.GroupBy(_ => _.Group.Name);
+
+    var result = groups.ToDictionary(_ => _.Key, _ => _.ToList());
+
+    foreach (var grouping in groupings)
+    {
+        if (!result.ContainsKey(grouping.Name))
+        {
+            result.Add(grouping.Name, new List<MonitoredService>());
+        }
+    }
+}
+
+@foreach (var group in result)
+{
+    <div style="float: right;">
+
+    </div>
+    <h2>@group.Key</h2>
+    <table class="table table-responsive table-hover table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Service
+                </th>
+                <th>
+                </th>
+                <th>
+                    since
+                </th>
+                <th style="text-align: right">
+                    @*<a class="btn btn-xs btn-success" href="#">Add service</a>*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var target in group.Value)
+            {
+                var rowClass = target.IsUpAndRunning ? "success" : "danger";
+
+                <tr class="@rowClass">
+                    <td>
+                        @target.Name
+                    </td>
+                    <td>
+
+                        @if (target.IsUpAndRunning)
+                        {
+                            <i class="fa fa-check-circle"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-exclamation-circle"></i>
+                        }
+                    </td>
+                    <td>
+                        @(DateTime.Now.Subtract(target.LastStatusChange).ToPrettyFormat())
+                    </td>
+                    <td style="text-align: right;">
+                        <a class="btn btn-xs btn-danger" href="#">Outages</a>
+                        @*@if (User.IsInRole(Settings.Default.AdministratorRole))
+                            {
+                                <a class="btn btn-xs btn-warning" href="#">Edit</a>
+                                <a class="btn btn-xs btn-warning" href="#">Delete</a>
+                            }*@
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}

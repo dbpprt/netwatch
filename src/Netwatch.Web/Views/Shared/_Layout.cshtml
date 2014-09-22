@@ -1,0 +1,106 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Resources.Application_Site_Titel</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">
+                    <i class="fa fa-fw fa-globe"></i>
+                    @Html.ActionLink(Resources.Application_Titel, "Index", "Dashboard", null, new { @class = "", style = "text-decoration: none;" })
+                </div>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="@Url.Action("Index", "Dashboard")">
+                            <i class="fa fa-fw fa-dashboard"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Switches")">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            Switches
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "MonitoredServices")">
+                            <i class="fa fa-fw fa-gears"></i>
+                            Services
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Highscore")">
+                            <i class="fa fa-fw fa-trophy"></i>
+                            Highscore
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Groupings")">
+                            <i class="fa fa-fw fa-group"></i>
+                            Groupings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#search" data-toggle="modal" role="button">
+                            <i class="fa fa-fw fa-search"></i>
+                            Search mac
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Dennis Bappert</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <div id="search" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form method="POST" action="@Url.Action("Index", "MacAddresses")">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="mac" id="mac">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Go!</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </form>
+                        </div><!-- /.col-lg-6 -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

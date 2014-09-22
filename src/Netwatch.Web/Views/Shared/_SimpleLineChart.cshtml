@@ -1,0 +1,45 @@
+﻿@model TrafficStats.Web.ViewModels.Shared.LineChartViewModel
+
+@*<div style="text-align: center;">
+
+        <div class="row">
+            <h2 class="page-header">Traffic last 24 hours</h2>
+            <div class="col-md-12" style="text-align: center;">
+                <canvas id="canvas" height="360" width="800"></canvas>
+            </div>
+        </div>
+
+    </div>*@
+
+<canvas id="@Model.Id" height="@Model.Height" width="@Model.Width"></canvas>
+
+<script type="text/javascript">
+
+    @(string.Format("loadChart{0}()", Model.Id))
+
+    function @(string.Format("loadChart{0}()", Model.Id))
+    {
+        if (window.jQuery) {
+        $(document).ready(function () {
+            var @(Model.Id + "data") = {
+                labels: [@Html.Raw(String.Join(",", Model.Labels.Select(label => "\"" + label + "\"")))],
+                datasets: [
+                    @foreach (var set in Model.DataSets)
+                    {
+                    @Html.Raw(set.ToJavaScript())
+                }
+                ],
+                @Html.Raw(Model.Options.Aggregate("", (current, option) => current + String.Format("{0}: \"{1}\",\n", option.Key, option.Value)))
+
+            };
+
+            var @(Model.Id + "chart") = new Chart(document.getElementById(@Html.Raw(String.Format("\"{0}\"", Model.Id))).getContext("2d")).Line(@(Model.Id + "data"));
+
+        });
+    }
+    else
+    {
+            setTimeout('@(string.Format("loadChart{0}()", Model.Id))', 100);
+    }
+    }
+</script>

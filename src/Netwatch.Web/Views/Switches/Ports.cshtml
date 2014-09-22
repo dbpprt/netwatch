@@ -1,0 +1,43 @@
+﻿@using TrafficStats
+@using TrafficStats.Web.Common
+@model TrafficStats.Web.ViewModels.Switches.PortsViewModel
+
+<h2>Ports - @Model.Switch.DisplayName</h2>
+
+<table class="table table-responsive table-hover table-striped">
+    <thead>
+        <tr>
+            <th style="text-align: center;">Port</th>
+            <th style="text-align: center;">last scan</th>
+            <th style="text-align: center;">Inbound Traffic</th>
+            <th style="text-align: center;">Outbound Traffic</th>
+            <th>Comment</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var target in Model.Ports)
+        {
+            <tr>
+                <td style="text-align: center;">@target.MonitoredPort.PortNumber</td>
+                @if (target.MonitoredPort.LastTimeScanned.HasValue)
+                {
+                    <td style="text-align: center;">@(DateTime.Now.Subtract(target.MonitoredPort.LastTimeScanned.Value).Seconds)s ago</td>
+                }
+                else
+                {
+                    <td style="text-align: center;"> - </td>
+                }
+                <td style="text-align: center;">@String.Format(new FileSizeFormatProvider(), "{0:fs}", target.InboundTraffic)</td>
+                <td style="text-align: center;">@String.Format(new FileSizeFormatProvider(), "{0:fs}", target.OutboundTraffic)</td>
+                <td style="text-align: left;">@target.Comment</td>
+                <td style="text-align: right;">
+
+                    <a class="btn btn-xs btn-info" href="@Url.Action("Index", "PortDetails", new { snmpIpAddress = target.SnmpTarget.IpAddress, portNumber = target.MonitoredPort.PortNumber })">Statistics</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
