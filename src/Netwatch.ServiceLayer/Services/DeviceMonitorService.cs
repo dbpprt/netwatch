@@ -31,6 +31,7 @@ using Netwatch.DataAccessLayer.Contracts;
 using Netwatch.Model.Entities;
 using Netwatch.ServiceLayer.Common;
 using Netwatch.ServiceLayer.Contracts;
+using Netwatch.ServiceLayer.Monitoring;
 
 namespace Netwatch.ServiceLayer.Services
 {
@@ -47,26 +48,32 @@ namespace Netwatch.ServiceLayer.Services
             {
                 target.LastTimeScanned = DateTime.Now;
 
-                using (var ping = new Ping())
-                {
-                    var pingResult = ping.Send(target.Address);
+                var method = target.Method;
 
-                    if (pingResult != null && pingResult.Status == IPStatus.Success)
-                    {
-                        if (!target.IsUpAndRunning)
-                        {
-                            target.IsUpAndRunning = true;
-                            target.LastStatusChange = DateTime.Now;
-                        }
-                    }
-                    else
-                    {
-                        if (target.IsUpAndRunning)
-                        {
-                            target.IsUpAndRunning = false;
-                            target.LastStatusChange = DateTime.Now;
-                        }
-                    }
+                if (string.IsNullOrEmpty(method))
+                {
+                    method = "ping";
+                }
+
+                var identifiers = method.Split(';');
+                var result = false;
+
+                foreach (var identifier in identifiers)
+                {
+                    var handler = MonitoringMethodFactory.GetMethod(identifier);
+                    result = await handler.Check(target, identifier);
+                }
+
+                if (result && !target.IsUpAndRunning)
+                {
+                    target.IsUpAndRunning = true;
+                    target.LastStatusChange = DateTime.Now;
+                }
+                else if (!result && target.IsUpAndRunning)
+                {
+
+                    target.IsUpAndRunning = false;
+                    target.LastStatusChange = DateTime.Now;
                 }
 
                 MonitoredServices.Update(target);

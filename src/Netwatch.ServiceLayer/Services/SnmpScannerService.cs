@@ -59,10 +59,12 @@ namespace Netwatch.ServiceLayer.Services
                 var avaliable = false;
                 try
                 {
-                    var results = ProcessTargetsTraffic(snmpTarget, SnmpOids.IfHcInOctets);
+                    var results = ProcessTargetsTraffic(snmpTarget, SnmpOids.IfHcInOctets,
+                        string.IsNullOrEmpty(snmpTarget.Community) ? "public" : snmpTarget.Community);
                     avaliable = true;
                     await SnmpResultService.ProcessTrafficResults(results);
-                    results = ProcessTargetsTraffic(snmpTarget, SnmpOids.IfHcOutOctets);
+                    results = ProcessTargetsTraffic(snmpTarget, SnmpOids.IfHcOutOctets,
+                        string.IsNullOrEmpty(snmpTarget.Community) ? "public" : snmpTarget.Community);
                     await SnmpResultService.ProcessTrafficResults(results);
                 }
                 catch (Exception)
@@ -167,7 +169,8 @@ namespace Netwatch.ServiceLayer.Services
 
         private List<Vb> ReadFdbAddressTable(SnmpTarget snmpTarget)
         {
-            var community = new OctetString("public");
+            var community = new OctetString(
+                string.IsNullOrEmpty(snmpTarget.Community) ? "public" : snmpTarget.Community);
             var param = new AgentParameters(community) {Version = SnmpVersion.Ver2};
             var agent = new IpAddress(snmpTarget.IpAddress);
             var target = new UdpTarget((IPAddress) agent, 161, 2000, 1);
@@ -227,7 +230,8 @@ namespace Netwatch.ServiceLayer.Services
 
         private List<Vb> ReadFdbPortTable(SnmpTarget snmpTarget)
         {
-            var community = new OctetString("public");
+            var community = new OctetString(
+                string.IsNullOrEmpty(snmpTarget.Community) ? "public" : snmpTarget.Community);
             var param = new AgentParameters(community) {Version = SnmpVersion.Ver2};
             var agent = new IpAddress(snmpTarget.IpAddress);
             var target = new UdpTarget((IPAddress) agent, 161, 2000, 1);

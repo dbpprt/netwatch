@@ -74,6 +74,10 @@
     <Compile Include="Contracts\ISnmpStatisticsService.cs" />
     <Compile Include="Contracts\IUnitOfWork.cs" />
     <Compile Include="DependencyConfig.cs" />
+    <Compile Include="Monitoring\IMonitoringMethod.cs" />
+    <Compile Include="Monitoring\MonitoringMethodFactory.cs" />
+    <Compile Include="Monitoring\RequestMethod.cs" />
+    <Compile Include="Monitoring\PingMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DeviceMonitorService.cs" />
     <Compile Include="Services\GroupingService.cs" />

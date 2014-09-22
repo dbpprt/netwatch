@@ -46,5 +46,7 @@ namespace Netwatch.Model.Entities
         public Grouping Group { get; set; }
 
         public bool Reachable { get; set; }
+
+        public string Community { get; set; }
     }
 }
