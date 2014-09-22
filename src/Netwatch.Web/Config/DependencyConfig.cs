@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,14 +17,14 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using Microsoft.Practices.Unity;
-using TrafficStats.ServiceLayer.Contracts;
-using TrafficStats.ServiceLayer.Services;
+using Netwatch.ServiceLayer.Contracts;
+using Netwatch.ServiceLayer.Services;
 
-namespace TrafficStats.Web
+namespace Netwatch.Web
 {
     public static class DependencyConfig
     {
@@ -36,7 +37,6 @@ namespace TrafficStats.Web
                 .RegisterType<ISnmpStatisticsService, SnmpStatisticsService>(new HierarchicalLifetimeManager())
                 .RegisterType<IGroupingService, GroupingService>(new HierarchicalLifetimeManager())
                 .RegisterType<IReportService, ReportService>(new HierarchicalLifetimeManager());
-
         }
     }
 }

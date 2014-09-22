@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,24 +17,23 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model;
-using TrafficStats.Model.DataTransfer;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Common;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model;
+using Netwatch.Model.DataTransfer;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Common;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer.Services
+namespace Netwatch.ServiceLayer.Services
 {
     public class SnmpStatisticsService : ServiceBase<SnmpStatisticsService>, ISnmpStatisticsService
     {
@@ -53,7 +53,7 @@ namespace TrafficStats.ServiceLayer.Services
         protected IRepository<Grouping> Groupings { get; set; }
 
         [Dependency]
-        protected IRepository<MacPortMapping> MacPortMappings { get; set; } 
+        protected IRepository<MacPortMapping> MacPortMappings { get; set; }
 
         public async Task<SnmpTarget> GetSnmpTarget(string ipAddress)
         {
@@ -66,28 +66,28 @@ namespace TrafficStats.ServiceLayer.Services
             return snmpTarget;
         }
 
-        public async Task<List<PortStatistics>> GetHighscore(int countOfEntries, DateTime startTime, DateTime endTime, TrafficType type)
+        public async Task<List<PortStatistics>> GetHighscore(int countOfEntries, DateTime startTime, DateTime endTime,
+            TrafficType type)
         {
             try
             {
                 var entriesInTimespan = await CollectedTrafficDatas.Query()
-                .Where(data => data.TrafficType == type)
-                .Where(data => data.DiffedTimeSpan != null)
-                .Include(data => data.MonitoredPort)
-                .Where(data => !data.MonitoredPort.ExcludeFromStatistics)
-                .GroupBy(data => data.MonitoredPort)
-                .Select(data => data.Where(inner => inner.TimeScanned >= startTime))
-                .Select(data => data.Where(inner => inner.TimeScanned <= endTime))
-                .Select(data => data.OrderBy(inner => inner.TimeScanned))
-                .Select(data => new
-                {
-
-                    Sum = data.Sum(inner => inner.Octets),
-                    Data = data
-                })
-                .OrderByDescending(data => data.Sum)
-                .Take(countOfEntries)
-                .ToListAsync();
+                    .Where(data => data.TrafficType == type)
+                    .Where(data => data.DiffedTimeSpan != null)
+                    .Include(data => data.MonitoredPort)
+                    .Where(data => !data.MonitoredPort.ExcludeFromStatistics)
+                    .GroupBy(data => data.MonitoredPort)
+                    .Select(data => data.Where(inner => inner.TimeScanned >= startTime))
+                    .Select(data => data.Where(inner => inner.TimeScanned <= endTime))
+                    .Select(data => data.OrderBy(inner => inner.TimeScanned))
+                    .Select(data => new
+                    {
+                        Sum = data.Sum(inner => inner.Octets),
+                        Data = data
+                    })
+                    .OrderByDescending(data => data.Sum)
+                    .Take(countOfEntries)
+                    .ToListAsync();
 
                 var desiredSampledSeconds = (endTime - startTime).TotalSeconds;
                 var results = new List<PortStatistics>();
@@ -99,8 +99,8 @@ namespace TrafficStats.ServiceLayer.Services
                 foreach (var entry in entriesInTimespan)
                 {
                     var sampledSeconds = entry.Data.Sum(entity => entity.DiffedTimeSpan.Value.TotalSeconds);
-                    var correctionFactor = (float)desiredSampledSeconds / sampledSeconds;
-                    var trafficInSpan = (long)(correctionFactor * entry.Sum);
+                    var correctionFactor = (float) desiredSampledSeconds/sampledSeconds;
+                    var trafficInSpan = (long) (correctionFactor*entry.Sum);
 
                     var result = new PortStatistics
                     {
@@ -112,9 +112,9 @@ namespace TrafficStats.ServiceLayer.Services
                     result.SnmpTarget = result.MonitoredPort.SnmpTarget;
                     result.Comment = result.MonitoredPort.Comment;
 
-                    var bytesPerSecond = (float)trafficInSpan / desiredSampledSeconds;
+                    var bytesPerSecond = trafficInSpan/desiredSampledSeconds;
 
-                    var ordinals = new[] { "", "K", "M", "G", "T", "P", "E" };
+                    var ordinals = new[] {"", "K", "M", "G", "T", "P", "E"};
 
                     var ordinal = 0;
 
@@ -125,8 +125,8 @@ namespace TrafficStats.ServiceLayer.Services
                     }
 
                     result.EstimatedSpeed = String.Format("{0} {1}b/s",
-                       Math.Round(bytesPerSecond, 2, MidpointRounding.AwayFromZero),
-                       ordinals[ordinal]);
+                        Math.Round(bytesPerSecond, 2, MidpointRounding.AwayFromZero),
+                        ordinals[ordinal]);
 
                     switch (type)
                     {
@@ -148,7 +148,6 @@ namespace TrafficStats.ServiceLayer.Services
             {
                 return new List<PortStatistics>();
             }
-         
         }
 
         public async Task<List<PortStatistics>> GetInboundHighscore(int countOfEntries)
@@ -244,7 +243,7 @@ namespace TrafficStats.ServiceLayer.Services
                 .Include(_ => _.MonitoredPort.SnmpTarget)
                 .Where(_ => _.Mac == macAddress)
                 .ToListAsync();
-        } 
+        }
 
         public async Task<List<SwitchStatistics>> GetSwitchStatistics()
         {
@@ -261,9 +260,9 @@ namespace TrafficStats.ServiceLayer.Services
                 try
                 {
                     var inboundTraffic = await MonitoredPorts.Query()
-                    .Where(port => port.SnmpIpAddress == target.IpAddress)
-                    .Where(port => !port.ExcludeFromStatistics)
-                    .SumAsync(port => port.AllInOctets);
+                        .Where(port => port.SnmpIpAddress == target.IpAddress)
+                        .Where(port => !port.ExcludeFromStatistics)
+                        .SumAsync(port => port.AllInOctets);
 
                     var outboundTraffic = await MonitoredPorts.Query()
                         .Where(port => port.SnmpIpAddress == target.IpAddress)
@@ -283,7 +282,6 @@ namespace TrafficStats.ServiceLayer.Services
                 {
                     // TODO: Logging
                 }
-                
             }
 
             return results;

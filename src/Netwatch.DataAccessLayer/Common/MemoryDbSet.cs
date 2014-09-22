@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,10 +17,11 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -28,7 +30,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TrafficStats.DataAccessLayer.Common
+namespace Netwatch.DataAccessLayer.Common
 {
     public class MemoryDbSet<T> : IDbSet<T> where T : class
     {
@@ -36,29 +38,6 @@ namespace TrafficStats.DataAccessLayer.Common
         private readonly IQueryable _query;
         private int _identity = 1;
         private List<PropertyInfo> _keyProperties;
-
-        private void GetKeyProperties()
-        {
-            _keyProperties = new List<PropertyInfo>();
-            PropertyInfo[] properties = typeof(T).GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                foreach (Attribute attribute in property.GetCustomAttributes(true))
-                {
-                    if (attribute is KeyAttribute)
-                    {
-                        _keyProperties.Add(property);
-                    }
-                }
-            }
-        }
-
-        private void GenerateId(T entity)
-        {
-            // If non-composite integer key
-            if (_keyProperties.Count == 1 && _keyProperties[0].PropertyType == typeof(Int32))
-                _keyProperties[0].SetValue(entity, _identity++, null);
-        }
 
         public MemoryDbSet()
         {
@@ -73,8 +52,8 @@ namespace TrafficStats.DataAccessLayer.Common
             if (keyValues.Length != _keyProperties.Count)
                 throw new ArgumentException("Incorrect number of keys passed to find method");
 
-            IQueryable<T> keyQuery = this.AsQueryable<T>();
-            for (int i = 0; i < keyValues.Length; i++)
+            var keyQuery = this.AsQueryable();
+            for (var i = 0; i < keyValues.Length; i++)
             {
                 var x = i; // nested linq
                 keyQuery = keyQuery.Where(entity => _keyProperties[x].GetValue(entity, null).Equals(keyValues[x]));
@@ -102,11 +81,6 @@ namespace TrafficStats.DataAccessLayer.Common
             return item;
         }
 
-        public void Detach(T item)
-        {
-            _data.Remove(item);
-        }
-
         Type IQueryable.ElementType
         {
             get { return _query.ElementType; }
@@ -122,7 +96,7 @@ namespace TrafficStats.DataAccessLayer.Common
             get { return _query.Provider; }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return _data.GetEnumerator();
         }
@@ -139,15 +113,40 @@ namespace TrafficStats.DataAccessLayer.Common
 
         public ObservableCollection<T> Local
         {
-            get
-            {
-                return new ObservableCollection<T>(_data);
-            }
+            get { return new ObservableCollection<T>(_data); }
         }
 
         public TDerivedEntity Create<TDerivedEntity>() where TDerivedEntity : class, T
         {
             return Activator.CreateInstance<TDerivedEntity>();
+        }
+
+        private void GetKeyProperties()
+        {
+            _keyProperties = new List<PropertyInfo>();
+            var properties = typeof (T).GetProperties();
+            foreach (var property in properties)
+            {
+                foreach (Attribute attribute in property.GetCustomAttributes(true))
+                {
+                    if (attribute is KeyAttribute)
+                    {
+                        _keyProperties.Add(property);
+                    }
+                }
+            }
+        }
+
+        private void GenerateId(T entity)
+        {
+            // If non-composite integer key
+            if (_keyProperties.Count == 1 && _keyProperties[0].PropertyType == typeof (Int32))
+                _keyProperties[0].SetValue(entity, _identity++, null);
+        }
+
+        public void Detach(T item)
+        {
+            _data.Remove(item);
         }
     }
 }

@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,22 +17,20 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
-using TrafficStats.Model;
-using TrafficStats.ServiceLayer.Contracts;
-using TrafficStats.Web.Common;
-using TrafficStats.Web.ViewModels.Highscore;
+using Netwatch.Model;
+using Netwatch.ServiceLayer.Contracts;
+using Netwatch.Web.Common;
+using Netwatch.Web.ViewModels.Highscore;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     public class HighscoreController : BaseController
     {
@@ -48,11 +47,22 @@ namespace TrafficStats.Web.Controllers
         {
             var viewModel = new IndexViewModel
             {
-                InboundLastHour = await SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(1, 0 ,0)), DateTime.Now, TrafficType.Inbound),
-                OutboundLastHour = await SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(1, 0, 0)), DateTime.Now, TrafficType.Outbound),
-                InboundLastMinutes = await SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)), DateTime.Now, TrafficType.Inbound),
-                OutboundLastMinutes = await SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)), DateTime.Now, TrafficType.Outbound),
-                
+                InboundLastHour =
+                    await
+                        SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(1, 0, 0)),
+                            DateTime.Now, TrafficType.Inbound),
+                OutboundLastHour =
+                    await
+                        SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(1, 0, 0)),
+                            DateTime.Now, TrafficType.Outbound),
+                InboundLastMinutes =
+                    await
+                        SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)),
+                            DateTime.Now, TrafficType.Inbound),
+                OutboundLastMinutes =
+                    await
+                        SnmpStatisticsService.GetHighscore(10, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)),
+                            DateTime.Now, TrafficType.Outbound),
                 InboundHighscore = await SnmpStatisticsService.GetInboundHighscore(10),
                 OutboundHighscore = await SnmpStatisticsService.GetOutboundHighscore(10)
             };
@@ -75,5 +85,5 @@ namespace TrafficStats.Web.Controllers
 
             return View(viewModel);
         }
-	}
+    }
 }

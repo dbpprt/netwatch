@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,21 +17,21 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System.Collections.Generic;
-using TrafficStats.Model.DataTransfer;
+using Netwatch.Model.DataTransfer;
 
-namespace TrafficStats.Web.ViewModels.Highscore
+namespace Netwatch.Web.ViewModels.Highscore
 {
     public class IndexViewModel
     {
         public List<PortStatistics> InboundLastMinutes { get; set; }
-        public List<PortStatistics> OutboundLastMinutes { get; set; } 
+        public List<PortStatistics> OutboundLastMinutes { get; set; }
         public List<PortStatistics> InboundLastHour { get; set; }
-        public List<PortStatistics> OutboundLastHour { get; set; } 
+        public List<PortStatistics> OutboundLastHour { get; set; }
         public List<PortStatistics> InboundHighscore { get; set; }
-        public List<PortStatistics> OutboundHighscore { get; set; } 
+        public List<PortStatistics> OutboundHighscore { get; set; }
     }
 }

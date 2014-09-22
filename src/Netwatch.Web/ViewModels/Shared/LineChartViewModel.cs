@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,31 +17,29 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Web;
 
-namespace TrafficStats.Web.ViewModels.Shared
+namespace Netwatch.Web.ViewModels.Shared
 {
     public class LineChartDataSet
     {
+        public LineChartDataSet()
+        {
+            Options = new Dictionary<string, string>();
+        }
+
         public string FillColor { get; set; }
         public string StrokeColor { get; set; }
         public string PointColor { get; set; }
         public string PointStrokeColor { get; set; }
 
-        public Dictionary<string, string> Options { get; set; } 
+        public Dictionary<string, string> Options { get; set; }
         public List<long> Data { get; set; }
-
-        public LineChartDataSet()
-        {
-            Options = new Dictionary<string, string>();
-        }
 
         public LineChartDataSet WithFirstColorSchema()
         {
@@ -86,7 +85,8 @@ namespace TrafficStats.Web.ViewModels.Shared
             result += "pointStrokeColor: " + "\"" + PointStrokeColor + "\",\n";
             result += "data: [" + String.Join(", ", Data) + "]\n";
 
-            result = Options.Aggregate(result, (current, option) => current + String.Format("{0}: \"{1}\",\n", option.Key, option.Value));
+            result = Options.Aggregate(result,
+                (current, option) => current + String.Format("{0}: \"{1}\",\n", option.Key, option.Value));
 
             result += "},\n";
 
@@ -96,6 +96,11 @@ namespace TrafficStats.Web.ViewModels.Shared
 
     public class LineChartViewModel
     {
+        public LineChartViewModel()
+        {
+            Options = new Dictionary<string, string>();
+        }
+
         public string Id { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
@@ -104,11 +109,6 @@ namespace TrafficStats.Web.ViewModels.Shared
         public List<LineChartDataSet> DataSets { get; set; }
 
         public Dictionary<string, string> Options { get; set; }
-
-        public LineChartViewModel()
-        {
-            Options = new Dictionary<string, string>();
-        }
 
         public LineChartViewModel AddOption(string key, string value)
         {

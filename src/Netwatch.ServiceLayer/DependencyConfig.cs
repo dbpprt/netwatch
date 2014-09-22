@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,16 +17,16 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using Microsoft.Practices.Unity;
-using TrafficStats.DataAccessLayer;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.DataAccessLayer;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer
+namespace Netwatch.ServiceLayer
 {
     public static class DependencyConfig
     {
@@ -34,9 +35,7 @@ namespace TrafficStats.ServiceLayer
             container
                 .RegisterType<IDbContext, EntityContext>(new HierarchicalLifetimeManager(), new InjectionConstructor())
                 //.RegisterType<IDbContext, MemoryDbContext>(new InjectionConstructor())
-
                 .RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager())
-
                 .RegisterType<IRepository<CollectedTrafficData>, Repository<CollectedTrafficData>>(
                     new HierarchicalLifetimeManager())
                 .RegisterType<IRepository<MonitoredPort>, Repository<MonitoredPort>>(new HierarchicalLifetimeManager())
@@ -48,7 +47,6 @@ namespace TrafficStats.ServiceLayer
                 .RegisterType<IRepository<MacAddress>, Repository<MacAddress>>(new HierarchicalLifetimeManager())
                 .RegisterType<IRepository<User>, Repository<User>>(new HierarchicalLifetimeManager())
                 .RegisterType<IRepository<MacPortMapping>, Repository<MacPortMapping>>(new HierarchicalLifetimeManager());
-
         }
     }
 }

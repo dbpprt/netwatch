@@ -1,6 +1,5 @@
-﻿@using TrafficStats
-@using TrafficStats.Web.Common
-@model TrafficStats.Web.ViewModels.Switches.PortsViewModel
+﻿@using Netwatch
+@model Netwatch.Web.ViewModels.Switches.PortsViewModel
 
 <h2>Ports - @Model.Switch.DisplayName</h2>
 
@@ -33,7 +32,7 @@
                 <td style="text-align: left;">@target.Comment</td>
                 <td style="text-align: right;">
 
-                    <a class="btn btn-xs btn-info" href="@Url.Action("Index", "PortDetails", new { snmpIpAddress = target.SnmpTarget.IpAddress, portNumber = target.MonitoredPort.PortNumber })">Statistics</a>
+                    <a class="btn btn-xs btn-info" href="@Url.Action("Index", "PortDetails", new {snmpIpAddress = target.SnmpTarget.IpAddress, portNumber = target.MonitoredPort.PortNumber})">Statistics</a>
                 </td>
             </tr>
         }

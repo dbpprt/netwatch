@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,24 +17,22 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
-using SnmpSharpNet;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Common;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Common;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer.Services
+namespace Netwatch.ServiceLayer.Services
 {
     public class ReportService : ServiceBase<ReportService>, IReportService
     {
@@ -42,15 +41,15 @@ namespace TrafficStats.ServiceLayer.Services
 
         [Dependency]
         protected IRepository<MonitoredPort> MonitoredPorts { get; set; }
- 
+
         [Dependency]
-        protected IRepository<PortReport> PortReports { get; set; } 
+        protected IRepository<PortReport> PortReports { get; set; }
 
         [Dependency]
         protected IRepository<CollectedTrafficData> CollectedTrafficDatas { get; set; }
 
         [Dependency]
-        protected IRepository<MacPortMapping> MacPortMappings { get; set; } 
+        protected IRepository<MacPortMapping> MacPortMappings { get; set; }
 
         public async Task<List<PortReport>> GetOverallDayStatistic(DateTime day)
         {
@@ -143,15 +142,15 @@ namespace TrafficStats.ServiceLayer.Services
             return result;
         }
 
-        public async Task<List<DateTime>>  GetPendingReportTimes()
+        public async Task<List<DateTime>> GetPendingReportTimes()
         {
             var times = await CollectedTrafficDatas.Query()
                 .Select(data => new
                 {
-                    Hour = data.TimeScanned.Hour,
-                    Day = data.TimeScanned.Day,
-                    Month = data.TimeScanned.Month,
-                    Year = data.TimeScanned.Year
+                    data.TimeScanned.Hour,
+                    data.TimeScanned.Day,
+                    data.TimeScanned.Month,
+                    data.TimeScanned.Year
                 })
                 .Distinct()
                 .ToListAsync();

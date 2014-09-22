@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,25 +17,24 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model.DataTransfer;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Common;
+using Netwatch.ServiceLayer.Contracts;
 using SnmpSharpNet;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model.DataTransfer;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Common;
-using TrafficStats.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer.Services
+namespace Netwatch.ServiceLayer.Services
 {
     public class SnmpScannerService : ServiceBase<SnmpScannerService>, ISnmpScannerService
     {
@@ -93,7 +93,6 @@ namespace TrafficStats.ServiceLayer.Services
                 }
                 catch (Exception)
                 {
-
                     // TODO: Logging
                 }
 
@@ -117,7 +116,7 @@ namespace TrafficStats.ServiceLayer.Services
             }
         }
 
-        List<SnmpResult<int, string>> MapMacAddresses(SnmpTarget snmpTarget)
+        private List<SnmpResult<int, string>> MapMacAddresses(SnmpTarget snmpTarget)
         {
             var fdbAddressTable = ReadFdbAddressTable(snmpTarget);
             var fdbPortTable = ReadFdbPortTable(snmpTarget);
@@ -161,22 +160,20 @@ namespace TrafficStats.ServiceLayer.Services
                         results.Add(result);
                     }
                 }
-
-
             }
 
             return results;
         }
 
-        List<Vb> ReadFdbAddressTable(SnmpTarget snmpTarget)
+        private List<Vb> ReadFdbAddressTable(SnmpTarget snmpTarget)
         {
             var community = new OctetString("public");
-            var param = new AgentParameters(community) { Version = SnmpVersion.Ver2 };
+            var param = new AgentParameters(community) {Version = SnmpVersion.Ver2};
             var agent = new IpAddress(snmpTarget.IpAddress);
-            var target = new UdpTarget((IPAddress)agent, 161, 2000, 1);
+            var target = new UdpTarget((IPAddress) agent, 161, 2000, 1);
             var rootOid = new Oid(SnmpOids.Dot1DTpFdbAddress);
-            var lastOid = (Oid)rootOid.Clone();
-            var pdu = new Pdu(PduType.GetBulk) { NonRepeaters = 0, MaxRepetitions = 5 };
+            var lastOid = (Oid) rootOid.Clone();
+            var pdu = new Pdu(PduType.GetBulk) {NonRepeaters = 0, MaxRepetitions = 5};
             var results = new List<Vb>();
 
             while (lastOid != null)
@@ -187,7 +184,7 @@ namespace TrafficStats.ServiceLayer.Services
                 }
                 pdu.VbList.Clear();
                 pdu.VbList.Add(lastOid);
-                var result = (SnmpV2Packet)target.Request(pdu, param);
+                var result = (SnmpV2Packet) target.Request(pdu, param);
 
                 if (result != null)
                 {
@@ -228,15 +225,15 @@ namespace TrafficStats.ServiceLayer.Services
             return results;
         }
 
-        List<Vb> ReadFdbPortTable(SnmpTarget snmpTarget)
+        private List<Vb> ReadFdbPortTable(SnmpTarget snmpTarget)
         {
             var community = new OctetString("public");
-            var param = new AgentParameters(community) { Version = SnmpVersion.Ver2 };
+            var param = new AgentParameters(community) {Version = SnmpVersion.Ver2};
             var agent = new IpAddress(snmpTarget.IpAddress);
-            var target = new UdpTarget((IPAddress)agent, 161, 2000, 1);
+            var target = new UdpTarget((IPAddress) agent, 161, 2000, 1);
             var rootOid = new Oid(SnmpOids.Dot1DTpFdbPort);
-            var lastOid = (Oid)rootOid.Clone();
-            var pdu = new Pdu(PduType.GetBulk) { NonRepeaters = 0, MaxRepetitions = 5 };
+            var lastOid = (Oid) rootOid.Clone();
+            var pdu = new Pdu(PduType.GetBulk) {NonRepeaters = 0, MaxRepetitions = 5};
             var results = new List<Vb>();
 
             while (lastOid != null)
@@ -247,7 +244,7 @@ namespace TrafficStats.ServiceLayer.Services
                 }
                 pdu.VbList.Clear();
                 pdu.VbList.Add(lastOid);
-                var result = (SnmpV2Packet)target.Request(pdu, param);
+                var result = (SnmpV2Packet) target.Request(pdu, param);
 
                 if (result != null)
                 {
@@ -288,17 +285,18 @@ namespace TrafficStats.ServiceLayer.Services
             return results;
         }
 
-        List<SnmpResult<int, long>> ProcessTargetsTraffic(SnmpTarget snmpTarget, string snmpOid, string communityString = "public")
+        private List<SnmpResult<int, long>> ProcessTargetsTraffic(SnmpTarget snmpTarget, string snmpOid,
+            string communityString = "public")
         {
             var results = new List<SnmpResult<int, long>>();
 
             var community = new OctetString(communityString);
-            var param = new AgentParameters(community) { Version = SnmpVersion.Ver2 };
+            var param = new AgentParameters(community) {Version = SnmpVersion.Ver2};
             var agent = new IpAddress(snmpTarget.IpAddress);
-            var target = new UdpTarget((IPAddress)agent, 161, 2000, 1);
+            var target = new UdpTarget((IPAddress) agent, 161, 2000, 1);
             var rootOid = new Oid(snmpOid);
-            var lastOid = (Oid)rootOid.Clone();
-            var pdu = new Pdu(PduType.GetBulk) { NonRepeaters = 0, MaxRepetitions = 5 };
+            var lastOid = (Oid) rootOid.Clone();
+            var pdu = new Pdu(PduType.GetBulk) {NonRepeaters = 0, MaxRepetitions = 5};
 
             while (lastOid != null)
             {
@@ -308,7 +306,7 @@ namespace TrafficStats.ServiceLayer.Services
                 }
                 pdu.VbList.Clear();
                 pdu.VbList.Add(lastOid);
-                var result = (SnmpV2Packet)target.Request(pdu, param);
+                var result = (SnmpV2Packet) target.Request(pdu, param);
 
                 if (result != null)
                 {

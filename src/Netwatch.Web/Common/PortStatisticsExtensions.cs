@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,17 +17,12 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
+using Netwatch.Model.DataTransfer;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Services.Description;
-using TrafficStats.Model.DataTransfer;
-
-namespace TrafficStats.Web.Common
+namespace Netwatch.Web.Common
 {
     public static class PortStatisticsExtensions
     {
@@ -39,7 +35,6 @@ namespace TrafficStats.Web.Common
                 //{
                 //    stats.MonitoredPort.LastSeenMacAddress = mac.Substring(0, 9) + "XX:XX:XX";
                 //}
-
             }
 
             return stats;

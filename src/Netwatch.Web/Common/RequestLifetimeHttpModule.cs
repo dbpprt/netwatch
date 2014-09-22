@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,12 +17,12 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System.Web;
 
-namespace TrafficStats.Web.Common
+namespace Netwatch.Web.Common
 {
     internal class RequestLifetimeHttpModule : IHttpModule
     {

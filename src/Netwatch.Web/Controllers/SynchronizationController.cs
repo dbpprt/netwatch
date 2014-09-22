@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,20 +17,15 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     public class SynchronizationController : Controller
     {
@@ -48,16 +44,18 @@ namespace TrafficStats.Web.Controllers
 
             foreach (var pendingTime in pendingTimes)
             {
-                await ReportService.WritePortReports(pendingTime.Year, pendingTime.Month, pendingTime.Day, pendingTime.Hour);
+                await
+                    ReportService.WritePortReports(pendingTime.Year, pendingTime.Month, pendingTime.Day,
+                        pendingTime.Hour);
             }
-            
-            return Json(new { Status = "Done" }, JsonRequestBehavior.AllowGet);
+
+            return Json(new {Status = "Done"}, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> MacAddresses()
         {
             await SnmpScannerService.ExecuteMacScan();
-            
+
 
             return Json(new {Status = "Done"}, JsonRequestBehavior.AllowGet);
         }
@@ -66,14 +64,14 @@ namespace TrafficStats.Web.Controllers
         {
             await DeviceMonitorService.ExecuteDeviceMonitoring();
 
-            return Json(new { Status = "Done" }, JsonRequestBehavior.AllowGet);
+            return Json(new {Status = "Done"}, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Traffic()
         {
             await SnmpScannerService.ExecuteTrafficScan();
 
-            return Json(new { Status = "Done" }, JsonRequestBehavior.AllowGet);
+            return Json(new {Status = "Done"}, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> All()
@@ -82,7 +80,7 @@ namespace TrafficStats.Web.Controllers
             await DeviceMonitorService.ExecuteDeviceMonitoring();
             await SnmpScannerService.ExecuteMacScan();
 
-            return Json(new { Status = "Done" }, JsonRequestBehavior.AllowGet);
+            return Json(new {Status = "Done"}, JsonRequestBehavior.AllowGet);
         }
-	}
+    }
 }

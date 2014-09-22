@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,21 +17,19 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Common;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Common;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer.Services
+namespace Netwatch.ServiceLayer.Services
 {
     public class GroupingService : ServiceBase<GroupingService>, IGroupingService
     {

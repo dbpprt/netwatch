@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,8 +17,8 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 
-namespace TrafficStats.Web.Common
+namespace Netwatch.Web.Common
 {
     public class HttpUnityDependencyResolver : IDependencyResolver, IResolver
     {
@@ -36,34 +37,6 @@ namespace TrafficStats.Web.Common
         public HttpUnityDependencyResolver(IUnityContainer container)
         {
             _container = container;
-        }
-
-        public object GetService(Type serviceType)
-        {
-            if (typeof(IController).IsAssignableFrom(serviceType))
-            {
-                return ChildContainer.Resolve(serviceType);
-            }
-
-            return IsRegistered(serviceType) ? ChildContainer.Resolve(serviceType) : null;
-        }
-
-        public T GetService<T>()
-        {
-            return (T)GetService(typeof(T));
-        }
-
-        public IEnumerable<object> GetServices(Type serviceType)
-        {
-            if (IsRegistered(serviceType))
-            {
-                yield return ChildContainer.Resolve(serviceType);
-            }
-
-            foreach (var service in ChildContainer.ResolveAll(serviceType))
-            {
-                yield return service;
-            }
         }
 
         protected IUnityContainer ChildContainer
@@ -79,6 +52,34 @@ namespace TrafficStats.Web.Common
 
                 return childContainer;
             }
+        }
+
+        public object GetService(Type serviceType)
+        {
+            if (typeof (IController).IsAssignableFrom(serviceType))
+            {
+                return ChildContainer.Resolve(serviceType);
+            }
+
+            return IsRegistered(serviceType) ? ChildContainer.Resolve(serviceType) : null;
+        }
+
+        public IEnumerable<object> GetServices(Type serviceType)
+        {
+            if (IsRegistered(serviceType))
+            {
+                yield return ChildContainer.Resolve(serviceType);
+            }
+
+            foreach (var service in ChildContainer.ResolveAll(serviceType))
+            {
+                yield return service;
+            }
+        }
+
+        public T GetService<T>()
+        {
+            return (T) GetService(typeof (T));
         }
 
         public static void DisposeOfChildContainer()

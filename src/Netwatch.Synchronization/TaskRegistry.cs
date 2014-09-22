@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,13 +17,13 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using FluentScheduler;
-using TrafficStats.Synchronization.Tasks;
+using Netwatch.Synchronization.Tasks;
 
-namespace TrafficStats.Synchronization
+namespace Netwatch.Synchronization
 {
     public class TaskRegistry : Registry
     {
@@ -38,9 +39,9 @@ namespace TrafficStats.Synchronization
                 .Minutes();
 
             Schedule<MacMappingTask>()
-               .ToRunNow()
-               .AndEvery(15)
-               .Minutes();
+                .ToRunNow()
+                .AndEvery(15)
+                .Minutes();
 
             Schedule<ReportTask>()
                 .ToRunEvery(60)

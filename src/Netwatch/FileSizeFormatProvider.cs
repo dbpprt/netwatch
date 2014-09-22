@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,29 +17,19 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TrafficStats
+namespace Netwatch
 {
     public class FileSizeFormatProvider : IFormatProvider, ICustomFormatter
     {
-        public object GetFormat(Type formatType)
-        {
-            if (formatType == typeof(ICustomFormatter)) return this;
-            return null;
-        }
-
         private const string fileSizeFormat = "fs";
         private const Decimal OneKiloByte = 1024M;
-        private const Decimal OneMegaByte = OneKiloByte * 1024M;
-        private const Decimal OneGigaByte = OneMegaByte * 1024M;
+        private const Decimal OneMegaByte = OneKiloByte*1024M;
+        private const Decimal OneGigaByte = OneMegaByte*1024M;
 
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
@@ -84,21 +75,25 @@ namespace TrafficStats
                 suffix = " B";
             }
 
-            string precision = format.Substring(2);
+            var precision = format.Substring(2);
             if (String.IsNullOrEmpty(precision)) precision = "2";
             return String.Format("{0:N" + precision + "}{1}", size, suffix);
+        }
 
+        public object GetFormat(Type formatType)
+        {
+            if (formatType == typeof (ICustomFormatter)) return this;
+            return null;
         }
 
         private static string defaultFormat(string format, object arg, IFormatProvider formatProvider)
         {
-            IFormattable formattableArg = arg as IFormattable;
+            var formattableArg = arg as IFormattable;
             if (formattableArg != null)
             {
                 return formattableArg.ToString(format, formatProvider);
             }
             return arg.ToString();
         }
-
     }
 }

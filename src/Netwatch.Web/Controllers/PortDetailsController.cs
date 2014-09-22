@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,21 +17,17 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
-using TrafficStats.ServiceLayer.Contracts;
-using TrafficStats.ServiceLayer.Services;
-using TrafficStats.Web.ViewModels.PortDetails;
+using Netwatch.ServiceLayer.Contracts;
+using Netwatch.Web.ViewModels.PortDetails;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     public class PortDetailsController : BaseController
     {
@@ -42,7 +39,6 @@ namespace TrafficStats.Web.Controllers
 
         public async Task<ActionResult> Index(string snmpIpAddress, int portNumber)
         {
-
             var viewModel = new IndexViewModel
             {
                 TodayReports = await ReportService.GetDayStatisticForPort(snmpIpAddress, portNumber, DateTime.Now),
@@ -56,6 +52,5 @@ namespace TrafficStats.Web.Controllers
 
             return View(viewModel);
         }
-
-	}
+    }
 }

@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,26 +17,20 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using TrafficStats.Web.ViewModels.Shared;
+using Netwatch.Web.ViewModels.Shared;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     [Authorize]
     public class BaseController : Controller
     {
-
-
         public ActionResult SimpleLineChart(LineChartViewModel viewModel)
         {
             return PartialView("_SimpleLineChart", viewModel);
         }
-	}
+    }
 }

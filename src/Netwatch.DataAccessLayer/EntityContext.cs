@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,41 +17,23 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using TrafficStats.DataAccessLayer.Common;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.DataAccessLayer.Migrations;
-using TrafficStats.Model.Entities;
+using Netwatch.DataAccessLayer.Common;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.DataAccessLayer.Migrations;
+using Netwatch.Model.Entities;
 
-namespace TrafficStats.DataAccessLayer
+namespace Netwatch.DataAccessLayer
 {
     public class EntityContext : DbContext, IDbContext
     {
-        public DbSet<SnmpTarget> SnmpTargets { get; set; }
-        public DbSet<MonitoredPort> MonitoredPorts { get; set; }
-        public DbSet<CollectedTrafficData> CollectedTrafficDatas { get; set; }
-        public DbSet<MonitoredService> MonitoredServices { get; set; }
-        public DbSet<PortReport> PortReports { get; set; }
-        public DbSet<Grouping> Groupings { get; set; }
-        public DbSet<MacAddress> MacAddresses { get; set; }
-        public DbSet<MacPortMapping> MacPortMappings { get; set; }
-        public DbSet<User> Users { get; set; } 
-
         static EntityContext()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<EntityContext, Configuration>());
-        }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            modelBuilder.Conventions.Add(new DateTime2Convention());
         }
 
         public EntityContext()
@@ -68,8 +51,17 @@ namespace TrafficStats.DataAccessLayer
             Configuration.AutoDetectChangesEnabled = false;
             Configuration.ProxyCreationEnabled = false;
             Configuration.ValidateOnSaveEnabled = false;
-
         }
+
+        public DbSet<SnmpTarget> SnmpTargets { get; set; }
+        public DbSet<MonitoredPort> MonitoredPorts { get; set; }
+        public DbSet<CollectedTrafficData> CollectedTrafficDatas { get; set; }
+        public DbSet<MonitoredService> MonitoredServices { get; set; }
+        public DbSet<PortReport> PortReports { get; set; }
+        public DbSet<Grouping> Groupings { get; set; }
+        public DbSet<MacAddress> MacAddresses { get; set; }
+        public DbSet<MacPortMapping> MacPortMappings { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public new IDbSet<T> Set<T>() where T : class
         {
@@ -86,5 +78,12 @@ namespace TrafficStats.DataAccessLayer
             return Entry(o).State;
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Add(new DateTime2Convention());
+        }
     }
 }

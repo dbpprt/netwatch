@@ -1,5 +1,4 @@
-﻿@using TrafficStats.Web.ViewModels.Shared
-
+﻿@using Netwatch.Web.ViewModels.Shared
 @*<div style="text-align: center;">
 
         <div class="row">
@@ -42,16 +41,16 @@
     }*@
 
 @Html.Partial("_SimpleLineChart", new LineChartViewModel
+{
+    Id = "canvas",
+    Height = 400,
+    Width = 800,
+    Labels = new List<string> {"Januar", "Februar", "März"},
+    DataSets = new List<LineChartDataSet>
     {
-        Id = "canvas",
-        Height = 400,
-        Width = 800,
-        Labels = new List<string>() { "Januar", "Februar", "März" },
-        DataSets = new List<LineChartDataSet>()
+        new LineChartDataSet
         {
-            new LineChartDataSet()
-            {
-                Data = new List<long>() { 100, 200, 100 }
-            }
+            Data = new List<long> {100, 200, 100}
         }
-    })
+    }
+})

@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,22 +17,18 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 
-namespace TrafficStats.Web.Common
+namespace Netwatch.Web.Common
 {
     public static class TimespanExtensions
     {
         public static string ToPrettyFormat(this TimeSpan span)
         {
-
             if (span == TimeSpan.Zero) return "0 minutes";
 
             var sb = new StringBuilder();
@@ -42,7 +39,6 @@ namespace TrafficStats.Web.Common
             if (span.Minutes > 0)
                 sb.AppendFormat("{0} minute{1} ", span.Minutes, span.Minutes > 1 ? "s" : String.Empty);
             return sb.ToString();
-
         }
     }
 }

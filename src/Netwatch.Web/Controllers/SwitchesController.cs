@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,21 +17,18 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
-using TrafficStats.ServiceLayer.Contracts;
-using TrafficStats.Web.Common;
-using TrafficStats.Web.ViewModels.Switches;
+using Netwatch.ServiceLayer.Contracts;
+using Netwatch.Web.Common;
+using Netwatch.Web.ViewModels.Switches;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     public class SwitchesController : BaseController
     {
@@ -67,11 +65,10 @@ namespace TrafficStats.Web.Controllers
 
             if (!Client.IsAdmin())
             {
-                viewModel.Ports = viewModel.Ports.Select(stats => stats.ScramblePersonalData()).ToList();    
+                viewModel.Ports = viewModel.Ports.Select(stats => stats.ScramblePersonalData()).ToList();
             }
-            
+
             return View(viewModel);
         }
-
     }
 }

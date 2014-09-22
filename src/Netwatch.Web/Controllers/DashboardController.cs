@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,21 +17,18 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 #endregion
 
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
-using TrafficStats.Model;
-using TrafficStats.ServiceLayer.Contracts;
-using TrafficStats.Web.ViewModels.Dashboard;
+using Netwatch.Model;
+using Netwatch.ServiceLayer.Contracts;
+using Netwatch.Web.ViewModels.Dashboard;
 
-namespace TrafficStats.Web.Controllers
+namespace Netwatch.Web.Controllers
 {
     public class DashboardController : BaseController
     {
@@ -49,7 +47,8 @@ namespace TrafficStats.Web.Controllers
             {
                 MonitoredServices = await DeviceMonitorService.GetMonitoredServices(),
                 OverallTodayStats = await ReportService.GetOverallDayStatistic(DateTime.Now),
-                OverallYesterdayStats = await ReportService.GetOverallDayStatistic(DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
+                OverallYesterdayStats =
+                    await ReportService.GetOverallDayStatistic(DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
             };
 
             var inbound =

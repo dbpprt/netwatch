@@ -1,6 +1,6 @@
-﻿@using TrafficStats
-@using TrafficStats.Web.ViewModels.Shared
-@model TrafficStats.Web.ViewModels.Dashboard.IndexViewModel
+﻿@using Netwatch
+@using Netwatch.Web.ViewModels.Shared
+@model Netwatch.Web.ViewModels.Dashboard.IndexViewModel
 
 @*<div class="jumbotron" style="text-align: center;">
     @if (Model.EverythingIsFine)
@@ -108,23 +108,23 @@
     <div class="col-md-12" style="text-align: center;">
 
         @Html.Partial("_SimpleLineChart", new LineChartViewModel
+        {
+            Id = "today",
+            Height = 400,
+            Width = 800,
+            Labels = Model.OverallTodayStats.Select(report => report.Hour.ToString()).ToList(),
+            DataSets = new List<LineChartDataSet>
+            {
+                new LineChartDataSet
                 {
-                    Id = "today",
-                    Height = 400,
-                    Width = 800,
-                    Labels = Model.OverallTodayStats.Select(report => report.Hour.ToString()).ToList(),
-                    DataSets = new List<LineChartDataSet>
-                    {
-                        new LineChartDataSet
-                        {
-                            Data = Model.OverallTodayStats.Select(report => (long)report.InboundTraffic.FromByteToGigabyte()).ToList()
-                        }.WithFirstColorSchema(),
-                        new LineChartDataSet
-                        {
-                            Data = Model.OverallTodayStats.Select(report => (long)report.OutboundTraffic.FromByteToGigabyte()).ToList()
-                        }.WithSecondColorSchema()
-                    }
-                })
+                    Data = Model.OverallTodayStats.Select(report => (long) report.InboundTraffic.FromByteToGigabyte()).ToList()
+                }.WithFirstColorSchema(),
+                new LineChartDataSet
+                {
+                    Data = Model.OverallTodayStats.Select(report => (long) report.OutboundTraffic.FromByteToGigabyte()).ToList()
+                }.WithSecondColorSchema()
+            }
+        })
 
     </div>
 </div>
@@ -134,23 +134,23 @@
     <div class="col-md-12" style="text-align: center;">
 
         @Html.Partial("_SimpleLineChart", new LineChartViewModel
+        {
+            Id = "yesterday",
+            Height = 400,
+            Width = 800,
+            Labels = Model.OverallYesterdayStats.Select(report => report.Hour.ToString()).ToList(),
+            DataSets = new List<LineChartDataSet>
+            {
+                new LineChartDataSet
                 {
-                    Id = "yesterday",
-                    Height = 400,
-                    Width = 800,
-                    Labels = Model.OverallYesterdayStats.Select(report => report.Hour.ToString()).ToList(),
-                    DataSets = new List<LineChartDataSet>
-                    {
-                        new LineChartDataSet
-                        {
-                            Data = Model.OverallYesterdayStats.Select(report => (long)report.InboundTraffic.FromByteToGigabyte()).ToList()
-                        }.WithFirstColorSchema(),
-                        new LineChartDataSet
-                        {
-                            Data = Model.OverallYesterdayStats.Select(report => (long)report.OutboundTraffic.FromByteToGigabyte()).ToList()
-                        }.WithSecondColorSchema()
-                    }
-                })
+                    Data = Model.OverallYesterdayStats.Select(report => (long) report.InboundTraffic.FromByteToGigabyte()).ToList()
+                }.WithFirstColorSchema(),
+                new LineChartDataSet
+                {
+                    Data = Model.OverallYesterdayStats.Select(report => (long) report.OutboundTraffic.FromByteToGigabyte()).ToList()
+                }.WithSecondColorSchema()
+            }
+        })
 
     </div>
 </div>

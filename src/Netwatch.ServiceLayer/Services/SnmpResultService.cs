@@ -1,4 +1,5 @@
 #region Copyright (C) 2014 Netwatch
+
 // Copyright (C) 2014 Netwatch
 // https://github.com/flumbee/netwatch
 
@@ -16,28 +17,26 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-#endregion
 
+#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
-using TrafficStats.DataAccessLayer.Contracts;
-using TrafficStats.Model;
-using TrafficStats.Model.DataTransfer;
-using TrafficStats.Model.Entities;
-using TrafficStats.ServiceLayer.Common;
-using TrafficStats.ServiceLayer.Contracts;
+using Netwatch.DataAccessLayer.Contracts;
+using Netwatch.Model;
+using Netwatch.Model.DataTransfer;
+using Netwatch.Model.Entities;
+using Netwatch.ServiceLayer.Common;
+using Netwatch.ServiceLayer.Contracts;
 
-namespace TrafficStats.ServiceLayer.Services
+namespace Netwatch.ServiceLayer.Services
 {
     public class SnmpResultService : ServiceBase<SnmpResultService>, ISnmpResultService
     {
-        
         [Dependency]
         protected IRepository<SnmpTarget> SnmpTargets { get; set; }
 
@@ -54,37 +53,7 @@ namespace TrafficStats.ServiceLayer.Services
         protected IRepository<MacAddress> MacAddresses { get; set; }
 
         [Dependency]
-        protected IRepository<MacPortMapping> MacPortMappings { get; set; } 
-        
-        async Task<MonitoredPort> EnsureMonitoredPort(SnmpTarget target, int portNumber)
-        {
-            var existingPort = await MonitoredPorts.Query()
-                .FirstOrDefaultAsync(port => port.PortNumber == portNumber && port.SnmpIpAddress == target.IpAddress);
-
-            if (existingPort == null)
-            {
-                var newPort = new MonitoredPort
-                {
-                    AllInOctets = 0,
-                    AllOutOctets = 0,
-                    SnmpIpAddress = target.IpAddress,
-                    PortNumber = portNumber,
-                    FirstTimeScanned = DateTime.Now,
-                    LastInOctets = 0,
-                    LastOutOctets = 0,
-                    ExcludeFromStatistics = false,
-                    Comment = null
-                };
-
-                newPort = MonitoredPorts.Insert(newPort);
-
-                await Context.SaveAsync();
-
-                return newPort;
-            }
-
-            return existingPort;
-        }
+        protected IRepository<MacPortMapping> MacPortMappings { get; set; }
 
         public async Task ProcessTrafficResults(List<SnmpResult<int, long>> results)
         {
@@ -166,7 +135,37 @@ namespace TrafficStats.ServiceLayer.Services
             await Context.SaveAsync();
         }
 
-        async Task WriteTrafficData(MonitoredPort port, long octets, TrafficType trafficType)
+        private async Task<MonitoredPort> EnsureMonitoredPort(SnmpTarget target, int portNumber)
+        {
+            var existingPort = await MonitoredPorts.Query()
+                .FirstOrDefaultAsync(port => port.PortNumber == portNumber && port.SnmpIpAddress == target.IpAddress);
+
+            if (existingPort == null)
+            {
+                var newPort = new MonitoredPort
+                {
+                    AllInOctets = 0,
+                    AllOutOctets = 0,
+                    SnmpIpAddress = target.IpAddress,
+                    PortNumber = portNumber,
+                    FirstTimeScanned = DateTime.Now,
+                    LastInOctets = 0,
+                    LastOutOctets = 0,
+                    ExcludeFromStatistics = false,
+                    Comment = null
+                };
+
+                newPort = MonitoredPorts.Insert(newPort);
+
+                await Context.SaveAsync();
+
+                return newPort;
+            }
+
+            return existingPort;
+        }
+
+        private async Task WriteTrafficData(MonitoredPort port, long octets, TrafficType trafficType)
         {
             var entity = new CollectedTrafficData
             {
@@ -201,7 +200,7 @@ namespace TrafficStats.ServiceLayer.Services
             CollectedTrafficDatas.Insert(entity);
         }
 
-        async Task ProcessTrafficResult(MonitoredPort port, long octets, TrafficType trafficType)
+        private async Task ProcessTrafficResult(MonitoredPort port, long octets, TrafficType trafficType)
         {
             if (port.FirstTimeScanned == null)
             {
@@ -225,7 +224,7 @@ namespace TrafficStats.ServiceLayer.Services
                     {
                         port.LastOutOctets = octets;
                         port.LastInOctets = octets;
-                        
+
                         break;
                     }
                 }
@@ -274,7 +273,7 @@ namespace TrafficStats.ServiceLayer.Services
             }
             port.LastTimeScanned = DateTime.Now;
             MonitoredPorts.Update(port);
-            
+
             await WriteTrafficData(port, octets, trafficType);
         }
     }
